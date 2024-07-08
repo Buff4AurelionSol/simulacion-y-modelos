@@ -4,8 +4,11 @@ import pandas as pd
 
 SALDO_INICIAL = 100
 
-def hacer_apuesta():
-    apuesta = random.randint(5, 100)
+def hacer_apuesta(saldo_actual):
+    if saldo_actual < 5:
+        return saldo_actual
+    apuesta_maxima = min(100, saldo_actual)  # La apuesta no puede exceder el saldo actual
+    apuesta = random.randint(5, apuesta_maxima)
     return apuesta
 
 def comprobar_juego(dado):
@@ -16,14 +19,21 @@ def jugar():
     perdidas_acumuladas = 0
     ganancias_acumuladas = 0 
 
-    while perdidas_acumuladas < 100 and ganancias_acumuladas <= 500: 
+    while perdidas_acumuladas < 100 and ganancias_acumuladas <= 500:
         dado = random.randint(1, 6)
         if comprobar_juego(dado):
-            apuesta = 2 * hacer_apuesta()
+            apuesta = 2 * hacer_apuesta(saldo_actual)
+            saldo_actual += apuesta
             ganancias_acumuladas += apuesta
         else: 
-            apuesta = hacer_apuesta()
+            apuesta = hacer_apuesta(saldo_actual)
+            saldo_actual -= apuesta
             perdidas_acumuladas += apuesta
+        
+        # Si el saldo actual es negativo, el jugador no puede seguir jugando
+        if saldo_actual <= 0:
+            break
+
     resultados = [ganancias_acumuladas, perdidas_acumuladas]
     return resultados
 
