@@ -41,16 +41,24 @@ if __name__ == "__main__":
     numero_ganadores = 0
     numero_perdedores = 0
     juegos = []
+    total_ganancias = 0
+    total_perdidas = 0
 
     for i in range(500):
         resultados = jugar()
         juego_num = i + 1
         estado = "GANADOR" if resultados[0] >= 500 else "PERDEDOR"
         juegos.append([juego_num, estado, resultados[0], resultados[1]])
+        total_ganancias += resultados[0]
+        total_perdidas += resultados[1]
         if estado == "GANADOR":
             numero_ganadores += 1 
         else:
             numero_perdedores += 1
+
+    # Calcular promedios
+    promedio_ganancias = total_ganancias / 500
+    promedio_perdidas = total_perdidas / 500
 
     # Mostrar resultados de cada juego en consola
     headers = ["Juego Número", "Estado", "Ganancias", "Pérdidas"]
@@ -63,7 +71,9 @@ if __name__ == "__main__":
     # Mostrar resumen
     resumen = [
         ["Número de ganadores", numero_ganadores],
-        ["Número de perdedores", numero_perdedores]
+        ["Número de perdedores", numero_perdedores],
+        ["Promedio de ganancias", promedio_ganancias],
+        ["Promedio de pérdidas", promedio_perdidas]
     ]
     print("\nRESUMEN")
     print(tabulate(resumen, tablefmt="grid"))
